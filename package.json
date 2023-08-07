@@ -1,0 +1,77 @@
+{
+	"name": "screenshots",
+	"version": "1.0.0",
+	"description": "",
+	"main": "",
+	"module": "",
+	"type": "module",
+	"author": "Valentin Degenne <vdegenne@gmail.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"scripts": {
+		"preinstall": "node --no-warnings install/install.cjs",
+		"dev": "wireit",
+		"build": "wireit",
+		"build:infofile": "wireit"
+	},
+	"wireit": {
+		"build:infofile": {
+			"command": "node scripts/build-images-info-file.cjs",
+			"files": [
+				"scripts/build-images-info-file.cjs",
+				"docs/images"
+			],
+			"output": [
+				"src/images.json"
+			]
+		},
+		"dev": {
+			"dependencies": [
+				"build:infofile"
+			],
+			"command": "rm -rf node_modules/.vite && vite --host"
+		},
+		"build": {
+			"dependencies": [
+				"build:infofile"
+			],
+			"command": "vite build",
+			"files": [
+				"vite.config.js",
+				"src",
+				"tsconfig.json",
+				"index.html"
+			],
+			"output": [
+				"docs/index.html",
+				"docs/assets"
+			]
+		}
+	},
+	"devDependencies": {
+		"@material/material-color-utilities": "^0.2.7",
+		"@material/mwc-base": "^0.27.0",
+		"@material/web": "^1.0.0-pre.14",
+		"@snar/lit": "^1.4.0",
+		"@vdegenne/material-color-helpers": "^1.2.0",
+		"custom-element-decorator": "^0.6.0",
+		"html-minifier-terser": "^7.2.0",
+		"lit": "^2.8.0",
+		"lit-with-styles": "^1.1.1",
+		"material-3-prompt-dialog": "^0.7.3",
+		"relit": "^2.3.0",
+		"rollup-plugin-minify-template-literals": "^1.1.2",
+		"snar": "^2.2.0",
+		"snar-save-to-local-storage": "^1.0.1",
+		"tailwindcss": "^3.3.3",
+		"terser": "^5.19.2",
+		"toastit": "^0.1.0",
+		"typescript": "^5.1.6",
+		"vite": "^4.4.8",
+		"vite-plugin-singlefile": "^0.13.5",
+		"wireit": "^0.10.0"
+	}
+}

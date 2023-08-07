@@ -1,0 +1,9 @@
+{
+	"name": "install",
+	"version": "1.0.0",
+	"main": "install.cjs",
+	"dependencies": {
+		"chalk": "^4.1.2",
+		"enquirer": "^2.3.6"
+	}
+}
