@@ -46,7 +46,11 @@ export class AppShell extends LitElement {
 				</md-filled-icon-button>
 				<span>index: ${this.imgIndex}</span>
 				<md-filled-icon-button @click=${this.#delete}>
-					<md-icon>${deleted.exists(images[this.imgIndex]) ? 'delete_forever' : 'delete'}</md-icon>
+					<md-icon
+						>${deleted.exists(images[this.imgIndex])
+							? 'delete_forever'
+							: 'delete'}</md-icon
+					>
 				</md-filled-icon-button>
 				<md-filled-icon-button @click=${this.#forward}>
 					<md-icon>arrow_forward</md-icon>
@@ -59,12 +63,14 @@ export class AppShell extends LitElement {
 					@input=${(e: Event) => {
 						themeStore.themeColor = (e.target as ColorPicker).value;
 					}}
+					.value=${themeStore.themeColor}
 				></color-picker>
 				<color-mode-picker
 					class="flex-1"
 					@select=${(evt: Event) => {
 						themeStore.colorMode = (evt.target as ColorModePicker).value;
 					}}
+					.value=${themeStore.colorMode}
 				></color-mode-picker>
 			</div>
 		`;
@@ -80,7 +86,8 @@ export class AppShell extends LitElement {
 	}
 
 	#random() {
-		this.imgIndex = Math.floor(Math.random() * images.length);
+          this.imgIndex = 0;
+		// this.imgIndex = Math.floor(Math.random() * images.length);
 	}
 
 	#backward() {
