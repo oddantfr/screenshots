@@ -86,8 +86,7 @@ export class AppShell extends LitElement {
 	}
 
 	#random() {
-          this.imgIndex = 0;
-		// this.imgIndex = Math.floor(Math.random() * images.length);
+		this.imgIndex = Math.floor(Math.random() * images.length);
 	}
 
 	#backward() {
