@@ -25,13 +25,13 @@ import { withController } from '@snar/lit';
 @withStyles(/* styles */)
 @withController(deleted)
 export class AppShell extends LitElement {
-	@state() imgIndex!: number;
+	@state() imgIndex: number = 0;
 
 	@query('img') imgElement!: HTMLImageElement;
 
 	constructor() {
 		super();
-		this.#random();
+		// this.#random();
 	}
 
 	render() {
@@ -77,6 +77,7 @@ export class AppShell extends LitElement {
 	}
 
 	updated() {
+		return;
 		getArgbValuesFromImage(this.imgElement).then((pixels) => {
 			const colorCounts = QuantizerWsmeans.quantize(pixels, [], 2);
 

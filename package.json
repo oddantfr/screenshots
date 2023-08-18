@@ -15,9 +15,16 @@
 		"preinstall": "node --no-warnings install/install.cjs",
 		"dev": "wireit",
 		"build": "wireit",
-		"build:infofile": "wireit"
+		"build:infofile": "wireit",
+		"move-images": "wireit"
 	},
 	"wireit": {
+		"move-images": {
+			"command": "bash scripts/move-images.sh",
+			"files": [
+				"scripts/move-images.sh"
+			]
+		},
 		"build:infofile": {
 			"command": "node scripts/build-images-info-file.cjs",
 			"files": [
@@ -30,12 +37,14 @@
 		},
 		"dev": {
 			"dependencies": [
+				"move-images",
 				"build:infofile"
 			],
 			"command": "rm -rf node_modules/.vite && vite --host"
 		},
 		"build": {
 			"dependencies": [
+				"move-images",
 				"build:infofile"
 			],
 			"command": "vite build",
