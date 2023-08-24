@@ -66,6 +66,7 @@
 		"@material/web": "^1.0.0-pre.15",
 		"@snar/lit": "^1.4.0",
 		"@vdegenne/material-color-helpers": "^1.2.0",
+		"@vite-pwa/assets-generator": "^0.0.8",
 		"custom-element-decorator": "^0.6.0",
 		"html-minifier-terser": "^7.2.0",
 		"lit": "^2.8.0",
@@ -80,6 +81,7 @@
 		"toastit": "^0.1.0",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.8",
+		"vite-plugin-pwa": "^0.16.4",
 		"vite-plugin-singlefile": "^0.13.5",
 		"wireit": "^0.10.0"
 	}

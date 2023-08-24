@@ -2,7 +2,7 @@ import {defineConfig} from 'vite';
 // import {viteSingleFile} from 'vite-plugin-singlefile';
 // import {minify as minifyHtml} from 'html-minifier-terser';
 // import minifyLiterals from 'rollup-plugin-minify-template-literals';
-// import {VitePWA} from 'vite-plugin-pwa';
+import {VitePWA} from 'vite-plugin-pwa';
 
 const DEV_MODE = process.env.NODE_ENV == 'development';
 
@@ -59,35 +59,35 @@ export default defineConfig({
 		...plugins,
 		// terser(),
 		// basicSSL(),
-		// VitePWA({
-		// 	registerType: 'autoUpdate',
-		// 	includeAssets: ['*.png'],
-		// 	manifest: {
-		// 		icons: [
-		// 			{
-		// 				src: 'pwa-64x64.png',
-		// 				sizes: '64x64',
-		// 				type: 'image/png',
-		// 			},
-		// 			{
-		// 				src: 'pwa-192x192.png',
-		// 				sizes: '192x192',
-		// 				type: 'image/png',
-		// 			},
-		// 			{
-		// 				src: 'pwa-512x512.png',
-		// 				sizes: '512x512',
-		// 				type: 'image/png',
-		// 				purpose: 'any',
-		// 			},
-		// 			{
-		// 				src: 'maskable-icon-512x512.png',
-		// 				sizes: '512x512',
-		// 				type: 'image/png',
-		// 				purpose: 'maskable',
-		// 			},
-		// 		],
-		// 	},
-		// }),
+		VitePWA({
+			registerType: 'autoUpdate',
+			includeAssets: ['*.(png|ico)'],
+			manifest: {
+				icons: [
+					{
+						src: 'pwa-64x64.png',
+						sizes: '64x64',
+						type: 'image/png',
+					},
+					{
+						src: 'pwa-192x192.png',
+						sizes: '192x192',
+						type: 'image/png',
+					},
+					{
+						src: 'pwa-512x512.png',
+						sizes: '512x512',
+						type: 'image/png',
+						purpose: 'any',
+					},
+					{
+						src: 'maskable-icon-512x512.png',
+						sizes: '512x512',
+						type: 'image/png',
+						purpose: 'maskable',
+					},
+				],
+			},
+		}),
 	],
 });
