@@ -43,15 +43,18 @@ if (!DEV_MODE) {
 export default defineConfig({
 	base: './',
 	build: {
-		outDir: 'docs',
+		outDir: 'dist',
 		assetsInlineLimit: 6000,
 		emptyOutDir: false,
-		minify: 'terser',
-		terserOptions: {
-			format: {
-				comments: false,
-			},
-		},
+		// minify: 'terser',
+		// terserOptions: {
+		// 	format: {
+		// 		comments: false,
+		// 	},
+		// },
+	},
+	esbuild: {
+		legalComments: 'none',
 	},
 	//   server: {
 	//     hmr: false,

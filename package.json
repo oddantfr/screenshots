@@ -70,8 +70,8 @@
 				"index.html"
 			],
 			"output": [
-				"docs/index.html",
-				"docs/assets"
+				"dist",
+				"!dist/images"
 			]
 		},
 		"pwa-assets": {
