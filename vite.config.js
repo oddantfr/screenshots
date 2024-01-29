@@ -3,6 +3,7 @@ import {defineConfig} from 'vite';
 // import {minify as minifyHtml} from 'html-minifier-terser';
 // import minifyLiterals from 'rollup-plugin-minify-template-literals';
 import {VitePWA} from 'vite-plugin-pwa';
+import {mdicon2svg} from 'vite-plugin-mdicon2svg';
 
 const DEV_MODE = process.env.NODE_ENV == 'development';
 
@@ -57,6 +58,14 @@ export default defineConfig({
 	//   },
 	plugins: [
 		...plugins,
+		mdicon2svg({
+			variant: 'rounded',
+			include: [
+				'src/**/*.ts',
+				'node_modules/@vdegenne/material-color-helpers/elements/**/*.js',
+			],
+			devMode: true,
+		}),
 		// terser(),
 		// basicSSL(),
 		VitePWA({

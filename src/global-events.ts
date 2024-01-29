@@ -1,4 +1,4 @@
-import { themeStore } from "./styles.js";
+import {themeStore} from './styles/styles.js';
 
 window.addEventListener('keydown', (e) => {
 	if (e.altKey || e.ctrlKey) {
@@ -9,6 +9,18 @@ window.addEventListener('keydown', (e) => {
 		return;
 	}
 	if (e.key === 'd') {
-		themeStore.toggleMode()
+		themeStore.toggleMode();
+	}
+
+	if (e.key === 'ArrowLeft') {
+		window.app.backward();
+	}
+	if (e.key === 'ArrowRight') {
+		window.app.forward();
+	}
+
+	if (e.key === 'r') {
+		window.app.random();
 	}
 });
+

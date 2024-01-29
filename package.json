@@ -16,7 +16,8 @@
 		"dev": "wireit",
 		"build": "wireit",
 		"build:infofile": "wireit",
-		"move-images": "wireit"
+		"move-images": "wireit",
+		"pwa-assets": "wireit"
 	},
 	"wireit": {
 		"move-images": {
@@ -27,6 +28,9 @@
 		},
 		"build:infofile": {
 			"command": "node scripts/build-images-info-file.cjs",
+			"dependencies": [
+				"move-images"
+			],
 			"files": [
 				"scripts/build-images-info-file.cjs",
 				"docs/images"
@@ -36,18 +40,29 @@
 			]
 		},
 		"dev": {
+			"command": "vite --host",
+			"output": [
+				"node_modules/.vite"
+			],
+			"files": [
+				"vite.config.js",
+				"index.html",
+				"tsconfig.json",
+				"src"
+			],
 			"dependencies": [
 				"move-images",
-				"build:infofile"
-			],
-			"command": "rm -rf node_modules/.vite && vite"
+				"build:infofile",
+				"pwa-assets"
+			]
 		},
 		"build": {
+			"command": "vite build",
 			"dependencies": [
 				"move-images",
-				"build:infofile"
+				"build:infofile",
+				"pwa-assets"
 			],
-			"command": "vite build",
 			"files": [
 				"vite.config.js",
 				"src",
@@ -58,15 +73,29 @@
 				"docs/index.html",
 				"docs/assets"
 			]
+		},
+		"pwa-assets": {
+			"command": "pwa-assets-generator --preset minimal-2023 --html.preset 2023 public/logo.png",
+			"files": [
+				"public/logo.png"
+			],
+			"output": [
+				"public/pwa-64x64.png",
+				"public/pwa-192x192.png",
+				"public/pwa-512x512.png",
+				"public/maskable-icon-512x512.png",
+				"public/apple-touch-icon-180x180.png",
+				"public/favicon.ico"
+			]
 		}
 	},
 	"devDependencies": {
 		"@material/material-color-utilities": "^0.2.7",
 		"@material/mwc-base": "^0.27.0",
-		"@material/web": "^1.0.0-pre.16",
+		"@material/web": "^1.2.0",
 		"@snar/lit": "^1.4.0",
 		"@vdegenne/material-color-helpers": "^1.2.0",
-		"@vite-pwa/assets-generator": "^0.0.8",
+		"@vite-pwa/assets-generator": "^0.2.3",
 		"custom-element-decorator": "^0.6.0",
 		"html-minifier-terser": "^7.2.0",
 		"lit": "^2.8.0",
@@ -80,8 +109,9 @@
 		"terser": "^5.19.2",
 		"toastit": "^0.1.0",
 		"typescript": "^5.1.6",
-		"vite": "^4.4.8",
-		"vite-plugin-pwa": "^0.16.4",
+		"vite": "^5.0.12",
+		"vite-plugin-mdicon2svg": "^0.0.4",
+		"vite-plugin-pwa": "^0.16.7",
 		"vite-plugin-singlefile": "^0.13.5",
 		"wireit": "^0.10.0"
 	}
