@@ -6,6 +6,10 @@
 	display: none;
 }
 
+h3 {
+	@apply font-normal;
+}
+
 /* .flex {
 	display: flex;
 }
