@@ -1,7 +1,8 @@
 import {argbFromRgba} from '@material/material-color-utilities';
+import toast from 'toastit';
 
 export function getArgbValuesFromImage(
-	image: HTMLImageElement
+	image: HTMLImageElement,
 ): Promise<number[]> {
 	return new Promise((resolve, reject) => {
 		image.onload = () => {
@@ -42,4 +43,9 @@ export function getArgbValuesFromImage(
 		// Start loading the image
 		// image.src = image.src;
 	});
+}
+
+export function copyToClipboard(value: string) {
+	navigator.clipboard.writeText(value);
+	toast('copied to clipboard');
 }

@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 import {mdicon2svg} from 'vite-plugin-mdicon2svg';
 import {VitePWA} from 'vite-plugin-pwa';
 import {materialAll} from 'rollup-plugin-material-all';
+import {materialShell} from 'material-shell/vite.js';
 
 export default defineConfig({
 	base: './',
@@ -17,6 +18,7 @@ export default defineConfig({
 		legalComments: 'none',
 	},
 	plugins: [
+		materialShell(),
 		materialAll({
 			include: [
 				'src/**/*.ts',

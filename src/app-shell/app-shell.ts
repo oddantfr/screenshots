@@ -2,27 +2,32 @@ import {
 	QuantizerWsmeans,
 	hexFromArgb,
 } from '@material/material-color-utilities';
-import {withController} from '@snar/lit';
 import {customElement} from 'custom-element-decorator';
 import {LitElement, html} from 'lit';
 import {withStyles} from 'lit-with-styles';
-import {query, state} from 'lit/decorators.js';
+import {query} from 'lit/decorators.js';
 import {deleted} from '../deleted.js';
 import {images} from '../images.js';
-import {settings, settingsDialog} from '../settings-dialog.js';
+import {settings} from '../settings-dialog.js';
 import {themeStore} from '../styles/styles.js';
 import {getArgbValuesFromImage} from '../utils.js';
+import {appState} from './app-state.js';
+import styles from './app-shell.css?inline';
+import {materialShellLoadingOff} from 'material-shell';
 
 @customElement({name: 'app-shell', inject: true})
-@withStyles(/* styles */)
-@withController(deleted)
+@withStyles(styles)
 export class AppShell extends LitElement {
-	@state() imgIndex: number = 0;
-
 	@query('img') imgElement!: HTMLImageElement;
 
+	firstUpdated() {
+		materialShellLoadingOff.call(this);
+		deleted.bind(this);
+		appState.bind(this);
+	}
+
 	render() {
-		const imgSrc = images[this.imgIndex];
+		const imgSrc = images[appState.index];
 		return html`
 			<div
 				class="flex flex-col absolute inset-0"
@@ -39,22 +44,35 @@ export class AppShell extends LitElement {
 						<md-icon>casino</md-icon>
 					</md-filled-tonal-icon-button>
 					<md-filled-tonal-icon-button
+						@click=${async () => {
+							const {settingsDialog} = await import('../settings-dialog.js');
+							settingsDialog.show();
+						}}
+					>
+						<md-icon>settings</md-icon>
+					</md-filled-tonal-icon-button>
+					<md-filled-tonal-icon-button
 						@click=${this.#delete}
 						style="--md-sys-color-secondary-container:var(--md-sys-color-error);--md-sys-color-on-secondary-container:var(--md-sys-color-on-error);"
 					>
-						${deleted.exists(images[this.imgIndex])
+						${deleted.exists(images[appState.index])
 							? html`<md-icon>delete_forever</md-icon>`
 							: html`<md-icon>delete</md-icon>`}
 					</md-filled-tonal-icon-button>
-					<md-filled-tonal-icon-button @click=${() => settingsDialog.show()}>
-						<md-icon>settings</md-icon>
+					<md-filled-tonal-icon-button
+						@click=${async () => {
+							const {memoDialog} = await import('../memo/memo-dialog.js');
+							memoDialog.show();
+						}}
+					>
+						<md-icon>memory</md-icon>
 					</md-filled-tonal-icon-button>
 					<div class="flex items-center">
 						<md-filled-tonal-icon-button @click=${this.backward}>
 							<md-icon>arrow_back</md-icon>
 						</md-filled-tonal-icon-button>
-						<div style="min-width:100px;" class="text-center">
-							${this.imgIndex}
+						<div style="min-width:60px;" class="text-center">
+							${appState.index}
 						</div>
 						<md-filled-tonal-icon-button @click=${this.forward}>
 							<md-icon>arrow_forward</md-icon>
@@ -85,26 +103,26 @@ export class AppShell extends LitElement {
 			candidates.push(images[startIndex]);
 		}
 
-		this.imgIndex =
+		appState.index =
 			Math.floor(Math.random() * (endIndex - startIndex)) + startIndex;
 	}
 
 	backward() {
-		if (this.imgIndex == 0) {
-			return (this.imgIndex = images.length - 1);
+		if (appState.index == 0) {
+			return (appState.index = images.length - 1);
 		}
-		return --this.imgIndex;
+		return --appState.index;
 	}
 
 	forward() {
-		if (this.imgIndex == images.length - 1) {
-			return (this.imgIndex = 0);
+		if (appState.index == images.length - 1) {
+			return (appState.index = 0);
 		}
-		return this.imgIndex++;
+		return appState.index++;
 	}
 
 	#delete() {
-		const item = images[this.imgIndex];
+		const item = images[appState.index];
 		if (deleted.exists(item)) {
 			deleted.remove(item);
 		} else {
@@ -120,3 +138,4 @@ declare global {
 }
 
 export const app = (window.app = new AppShell());
+document.querySelector('material-shell')?.appendChild(app);
