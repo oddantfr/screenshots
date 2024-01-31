@@ -27,14 +27,14 @@ class ThemeStore extends ReactiveController {
 		if (changed.has('colorMode')) {
 			ThemeManager.mode = this.colorMode;
 		}
-		const {themeFromSourceColor, applyTheme} = await import(
+		const {applyTheme, themeFromSourceColor} = await import(
 			'@vdegenne/material-color-helpers'
 		);
 		const theme = themeFromSourceColor(
 			this.themeColor,
 			ThemeManager.appliedTheme === 'dark',
 			'vibrant',
-			0
+			0,
 		);
 		applyTheme(document, theme!);
 	}

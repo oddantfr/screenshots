@@ -1,4 +1,5 @@
 node_modules
+images
 serviceAccountKey.json
 .wireit
 src/images.json

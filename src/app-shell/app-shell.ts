@@ -2,17 +2,11 @@ import {
 	QuantizerWsmeans,
 	hexFromArgb,
 } from '@material/material-color-utilities';
-import '@material/web/icon/icon.js';
-import '@material/web/iconbutton/filled-icon-button.js';
 import {withController} from '@snar/lit';
-import '@vdegenne/material-color-helpers/color-mode-picker';
-import {type ColorModePicker} from '@vdegenne/material-color-helpers/color-mode-picker';
-import '@vdegenne/material-color-helpers/color-picker';
-import {type ColorPicker} from '@vdegenne/material-color-helpers/color-picker';
+import {customElement} from 'custom-element-decorator';
 import {LitElement, html} from 'lit';
 import {withStyles} from 'lit-with-styles';
 import {query, state} from 'lit/decorators.js';
-import {customElement} from 'custom-element-decorator';
 import {deleted} from '../deleted.js';
 import {images} from '../images.js';
 import {settings, settingsDialog} from '../settings-dialog.js';
@@ -30,50 +24,43 @@ export class AppShell extends LitElement {
 	render() {
 		const imgSrc = images[this.imgIndex];
 		return html`
-			<div class="flex justify-between items-center p-2">
-				<md-filled-icon-button @click=${this.random}>
-					<md-icon>casino</md-icon>
-				</md-filled-icon-button>
-				<md-filled-icon-button
-					@click=${this.#delete}
-					style="--md-filled-icon-button-container-color:var(--md-sys-color-error)"
-				>
-					${deleted.exists(images[this.imgIndex])
-						? html`<md-icon>delete_forever</md-icon>`
-						: html`<md-icon>delete</md-icon>`}
-				</md-filled-icon-button>
-				<md-filled-icon-button @click=${() => settingsDialog.show()}>
-					<md-icon>settings</md-icon>
-				</md-filled-icon-button>
-				<div class="flex items-center">
-					<md-filled-icon-button @click=${this.backward}>
-						<md-icon>arrow_back</md-icon>
-					</md-filled-icon-button>
-					<div style="min-width:100px;" class="text-center">
-						index: ${this.imgIndex}
-					</div>
-					<md-filled-icon-button @click=${this.forward}>
-						<md-icon>arrow_forward</md-icon>
-					</md-filled-icon-button>
+			<div
+				class="flex flex-col absolute inset-0"
+				style="background-color:var(--md-sys-color-surface)"
+			>
+				<div class="flex-1 overflow-auto rounded-xl">
+					<img src="images/${imgSrc}" width="100%" class="rounded-xl" />
 				</div>
-			</div>
-			<img src="images/${imgSrc}" width="100%" />
-
-			<div class="flex items-center p-2">
-				<color-picker
-					class="mr-3"
-					@input=${(e: Event) => {
-						themeStore.themeColor = (e.target as ColorPicker).value;
-					}}
-					.value=${themeStore.themeColor}
-				></color-picker>
-				<color-mode-picker
-					class="flex-1"
-					@select=${(evt: Event) => {
-						themeStore.colorMode = (evt.target as ColorModePicker).value;
-					}}
-					.value=${themeStore.colorMode}
-				></color-mode-picker>
+				<div
+					class="flex justify-between items-center p-3"
+					style="background-color:var(--md-sys-color-surface-container)"
+				>
+					<md-filled-tonal-icon-button @click=${this.random}>
+						<md-icon>casino</md-icon>
+					</md-filled-tonal-icon-button>
+					<md-filled-tonal-icon-button
+						@click=${this.#delete}
+						style="--md-sys-color-secondary-container:var(--md-sys-color-error);--md-sys-color-on-secondary-container:var(--md-sys-color-on-error);"
+					>
+						${deleted.exists(images[this.imgIndex])
+							? html`<md-icon>delete_forever</md-icon>`
+							: html`<md-icon>delete</md-icon>`}
+					</md-filled-tonal-icon-button>
+					<md-filled-tonal-icon-button @click=${() => settingsDialog.show()}>
+						<md-icon>settings</md-icon>
+					</md-filled-tonal-icon-button>
+					<div class="flex items-center">
+						<md-filled-tonal-icon-button @click=${this.backward}>
+							<md-icon>arrow_back</md-icon>
+						</md-filled-tonal-icon-button>
+						<div style="min-width:100px;" class="text-center">
+							${this.imgIndex}
+						</div>
+						<md-filled-tonal-icon-button @click=${this.forward}>
+							<md-icon>arrow_forward</md-icon>
+						</md-filled-tonal-icon-button>
+					</div>
+				</div>
 			</div>
 		`;
 	}

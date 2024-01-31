@@ -4,8 +4,7 @@ import {defineConfig} from 'vite';
 // import minifyLiterals from 'rollup-plugin-minify-template-literals';
 import {mdicon2svg} from 'vite-plugin-mdicon2svg';
 import {VitePWA} from 'vite-plugin-pwa';
-
-const plugins = [];
+import {materialAll} from 'rollup-plugin-material-all';
 
 export default defineConfig({
 	base: './',
@@ -18,7 +17,12 @@ export default defineConfig({
 		legalComments: 'none',
 	},
 	plugins: [
-		...plugins,
+		materialAll({
+			include: [
+				'src/**/*.ts',
+				'node_modules/@vdegenne/material-color-helpers/lib/elements/**/*.js',
+			],
+		}),
 		mdicon2svg({
 			variant: 'rounded',
 			include: [

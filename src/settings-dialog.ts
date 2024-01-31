@@ -1,15 +1,17 @@
-import {LitElement, html} from 'lit';
-import {query} from 'lit/decorators.js';
-import '@material/web/dialog/dialog.js';
-import '@material/web/button/text-button.js';
-import '@material/web/slider/slider.js';
-import {MdDialog} from '@material/web/dialog/dialog.js';
-import {customElement} from 'custom-element-decorator';
-import {withStyles} from 'lit-with-styles';
+import type {MdDialog, MdSlider} from '@material/web/all.js';
 import {ReactiveController, withController} from '@snar/lit';
+import '@vdegenne/material-color-helpers/elements.js';
+import type {
+	ColorModePicker,
+	ColorPicker,
+} from '@vdegenne/material-color-helpers/elements.js';
+import {customElement} from 'custom-element-decorator';
+import {LitElement, html} from 'lit';
+import {withStyles} from 'lit-with-styles';
+import {query} from 'lit/decorators.js';
 import {state} from 'snar';
-import {MdSlider} from '@material/web/slider/slider.js';
-import { saveToLocalStorage } from 'snar-save-to-local-storage';
+import {saveToLocalStorage} from 'snar-save-to-local-storage';
+import {themeStore} from './styles/styles.js';
 
 @saveToLocalStorage('screenshots:settings')
 class Settings extends ReactiveController {
@@ -30,7 +32,7 @@ export class SettingsDialog extends LitElement {
 				<div slot="headline">Settings</div>
 
 				<form slot="content" method="dialog" id="form">
-					<h3>Picking range</h3>
+					<h4>Picking range</h4>
 					<md-slider
 						class="w-full mt-4"
 						labeled
@@ -46,6 +48,22 @@ export class SettingsDialog extends LitElement {
 						}}
 					>
 					</md-slider>
+					<div class="flex items-center p-2 mt-10">
+						<color-picker
+							class="mr-3"
+							@input=${(e: Event) => {
+								themeStore.themeColor = (e.target as ColorPicker).value;
+							}}
+							.value=${themeStore.themeColor}
+						></color-picker>
+						<color-mode-picker
+							class="flex-1"
+							@select=${(event: Event) => {
+								themeStore.colorMode = (event.target as ColorModePicker).value;
+							}}
+							.value=${themeStore.colorMode}
+						></color-mode-picker>
+					</div>
 				</form>
 
 				<div slot="actions">
