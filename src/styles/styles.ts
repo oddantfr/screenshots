@@ -1,17 +1,14 @@
-import {PropertyValues} from 'lit';
-import {ThemeManager, setBaseStyles} from 'lit-with-styles';
-import {state} from 'snar';
 import {ReactiveController} from '@snar/lit';
+import {PropertyValues} from 'lit';
+import {ThemeManager} from 'lit-with-styles';
+import {state} from 'snar';
 import {saveToLocalStorage} from 'snar-save-to-local-storage';
-import sharedStyles from './stylesheets/shared.css?inline';
 
 declare global {
 	interface Window {
 		themeStore: ThemeStore;
 	}
 }
-
-setBaseStyles(sharedStyles);
 
 export type ColorMode =
 	(typeof ThemeManager.Mode)[keyof typeof ThemeManager.Mode];

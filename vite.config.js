@@ -24,6 +24,11 @@ export default defineConfig({
 				'src/**/*.ts',
 				'node_modules/@vdegenne/material-color-helpers/lib/elements/**/*.js',
 			],
+			additionalElements: [
+				...(process.env.NODE_ENV === 'development'
+					? ['md-outlined-segmented-button-set', 'md-outlined-segmented-button']
+					: []),
+			],
 		}),
 		mdicon2svg({
 			variant: 'rounded',

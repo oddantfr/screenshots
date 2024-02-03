@@ -1,19 +1,14 @@
-import {
-	QuantizerWsmeans,
-	hexFromArgb,
-} from '@material/material-color-utilities';
 import {customElement} from 'custom-element-decorator';
 import {LitElement, html} from 'lit';
 import {withStyles} from 'lit-with-styles';
 import {query} from 'lit/decorators.js';
+import {materialShellLoadingOff} from 'material-shell';
 import {deleted} from '../deleted.js';
 import {images} from '../images.js';
-import {settings} from '../settings-dialog.js';
-import {themeStore} from '../styles/styles.js';
-import {getArgbValuesFromImage} from '../utils.js';
-import {appState} from './app-state.js';
+import {settings} from '../settings/SettingsController.js';
 import styles from './app-shell.css?inline';
-import {materialShellLoadingOff} from 'material-shell';
+import {historyCtrl} from '../history/HistoryController.js';
+import {memoCtrl} from '../memo/memo-controller.js';
 
 @customElement({name: 'app-shell', inject: true})
 @withStyles(styles)
@@ -23,42 +18,34 @@ export class AppShell extends LitElement {
 	firstUpdated() {
 		materialShellLoadingOff.call(this);
 		deleted.bind(this);
-		appState.bind(this);
+		historyCtrl.bind(this);
+		settings.bind(this);
+		memoCtrl.bind(this);
 	}
 
 	render() {
-		const imgSrc = images[appState.index];
+		const imgSrc = images[historyCtrl.currentIndex];
+
 		return html`
-			<div
-				class="flex flex-col absolute inset-0"
-				style="background-color:var(--md-sys-color-surface)"
-			>
-				<div class="flex-1 overflow-auto rounded-xl">
-					<img src="images/${imgSrc}" width="100%" class="rounded-xl" />
+			<div class="flex flex-col absolute inset-0">
+				<div
+					class="flex-1 overflow-scroll rounded-xl flex justify-center items-center"
+					style="background-color:var(--md-sys-color-surface)"
+				>
+					<img src="images/${imgSrc}" class="rounded-xl w-full m-auto" />
 				</div>
 				<div
 					class="flex justify-between items-center p-3"
 					style="background-color:var(--md-sys-color-surface-container)"
 				>
-					<md-filled-tonal-icon-button @click=${this.random}>
+					<md-filled-icon-button
+						@click=${this.random}
+						?disabled=${settings.pickFromSavedIndexes &&
+						memoCtrl.savedIndexes.length === 0}
+					>
 						<md-icon>casino</md-icon>
-					</md-filled-tonal-icon-button>
-					<md-filled-tonal-icon-button
-						@click=${async () => {
-							const {settingsDialog} = await import('../settings-dialog.js');
-							settingsDialog.show();
-						}}
-					>
-						<md-icon>settings</md-icon>
-					</md-filled-tonal-icon-button>
-					<md-filled-tonal-icon-button
-						@click=${this.#delete}
-						style="--md-sys-color-secondary-container:var(--md-sys-color-error);--md-sys-color-on-secondary-container:var(--md-sys-color-on-error);"
-					>
-						${deleted.exists(images[appState.index])
-							? html`<md-icon>delete_forever</md-icon>`
-							: html`<md-icon>delete</md-icon>`}
-					</md-filled-tonal-icon-button>
+					</md-filled-icon-button>
+
 					<md-filled-tonal-icon-button
 						@click=${async () => {
 							const {memoDialog} = await import('../memo/memo-dialog.js');
@@ -67,62 +54,93 @@ export class AppShell extends LitElement {
 					>
 						<md-icon>memory</md-icon>
 					</md-filled-tonal-icon-button>
+
+					<md-filled-tonal-icon-button
+						@click=${this.#delete}
+						style="--md-sys-color-secondary-container:var(--md-sys-color-error);--md-sys-color-on-secondary-container:var(--md-sys-color-on-error);"
+					>
+						${deleted.exists(images[historyCtrl.currentIndex])
+							? html`<md-icon>delete_forever</md-icon>`
+							: html`<md-icon>delete</md-icon>`}
+					</md-filled-tonal-icon-button>
+
+					<md-filled-tonal-icon-button
+						@click=${async () => {
+							const {settingsDialog} = await import(
+								'../settings/settings-dialog.js'
+							);
+							settingsDialog.show();
+						}}
+					>
+						<md-icon>settings</md-icon>
+					</md-filled-tonal-icon-button>
+
 					<div class="flex items-center">
-						<md-filled-tonal-icon-button @click=${this.backward}>
+						<md-filled-icon-button @click=${this.backward}>
 							<md-icon>arrow_back</md-icon>
-						</md-filled-tonal-icon-button>
-						<div style="min-width:60px;" class="text-center">
-							${appState.index}
-						</div>
-						<md-filled-tonal-icon-button @click=${this.forward}>
+						</md-filled-icon-button>
+						<md-text-button
+							@click=${async () => {
+								const {historyDialog} = await import(
+									'../history/history-dialog.js'
+								);
+								historyDialog.show();
+							}}
+							>${historyCtrl.currentIndex}</md-text-button
+						>
+						<md-filled-icon-button @click=${this.forward}>
 							<md-icon>arrow_forward</md-icon>
-						</md-filled-tonal-icon-button>
+						</md-filled-icon-button>
 					</div>
 				</div>
 			</div>
 		`;
 	}
 
-	updated() {
-		return;
-		getArgbValuesFromImage(this.imgElement).then((pixels) => {
-			const colorCounts = QuantizerWsmeans.quantize(pixels, [], 2);
-
-			const t = hexFromArgb([...colorCounts.keys()][0]);
-			themeStore.themeColor = t;
-		});
-	}
-
 	random() {
-		const total = images.length - 1;
-		const startIndex = Math.floor((total * settings.rangeStart) / 100);
-		const endIndex = Math.ceil((total * settings.rangeEnd) / 100);
-
-		const candidates = images.slice(startIndex, endIndex);
-		if (candidates.length === 0) {
-			candidates.push(images[startIndex]);
+		let picked: number;
+		if (settings.pickFromSavedIndexes) {
+			do {
+				picked =
+					memoCtrl.savedIndexes[
+						Math.floor(Math.random() * memoCtrl.savedIndexes.length)
+					];
+			} while (
+				memoCtrl.savedIndexes.length > 1 &&
+				picked === historyCtrl.currentIndex
+			);
+		} else {
+			const total = images.length - 1;
+			const startIndex = Math.floor((total * settings.rangeStart) / 100);
+			const endIndex = Math.ceil((total * settings.rangeEnd) / 100);
+			const range = endIndex - startIndex;
+			do {
+				picked = Math.floor(Math.random() * range) + startIndex;
+			} while (range > 1 && picked === historyCtrl.currentIndex);
+			historyCtrl.addIndex(picked);
 		}
 
-		appState.index =
-			Math.floor(Math.random() * (endIndex - startIndex)) + startIndex;
+		historyCtrl.currentIndex = picked;
 	}
 
 	backward() {
-		if (appState.index == 0) {
-			return (appState.index = images.length - 1);
+		if (historyCtrl.currentIndex == 0) {
+			historyCtrl.currentIndex = images.length - 1;
+		} else {
+			historyCtrl.currentIndex = historyCtrl.currentIndex - 1;
 		}
-		return --appState.index;
 	}
 
 	forward() {
-		if (appState.index == images.length - 1) {
-			return (appState.index = 0);
+		if (historyCtrl.currentIndex == images.length - 1) {
+			historyCtrl.currentIndex = 0;
+		} else {
+			historyCtrl.currentIndex = historyCtrl.currentIndex + 1;
 		}
-		return appState.index++;
 	}
 
 	#delete() {
-		const item = images[appState.index];
+		const item = images[historyCtrl.currentIndex];
 		if (deleted.exists(item)) {
 			deleted.remove(item);
 		} else {
