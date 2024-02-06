@@ -29,13 +29,13 @@ export class AppShell extends LitElement {
 		return html`
 			<div class="flex flex-col absolute inset-0">
 				<div
-					class="flex-1 overflow-scroll rounded-xl flex justify-center items-center"
-					style="background-color:var(--md-sys-color-surface)"
+					class="flex-1 overflow-scroll rounded-xl flex justify-center"
+					style="background-color:var(--md-sys-color-surface);align-items: safe end;"
 				>
-					<img src="images/${imgSrc}" class="rounded-xl w-full m-auto" />
+					<img src="images/${imgSrc}" class="rounded-xl w-full" />
 				</div>
 				<div
-					class="flex justify-between items-center p-3"
+					class="flex justify-between items-center p-5"
 					style="background-color:var(--md-sys-color-surface-container)"
 				>
 					<md-filled-icon-button
