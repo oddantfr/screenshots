@@ -1,4 +1,4 @@
-import{s as v,x as r,b as p,_ as h,e as u,t as g,k as s,N as f,q as y,O as _,j as b,i as w,u as x,w as $}from"./index-be573e0b.js";import"./elevation-561f2ab9.js";class C extends v{render(){return r`
+import{s as v,x as r,b as p,_ as h,e as u,t as g,k as s,N as f,q as y,O as _,j as b,i as w,u as x,w as $}from"./index-34c9da03.js";import"./elevation-cdb2e24e.js";class C extends v{render(){return r`
       <md-elevation part="elevation"></md-elevation>
       <div class="background"></div>
       <slot></slot>
@@ -18,7 +18,7 @@ import{s as v,x as r,b as p,_ as h,e as u,t as g,k as s,N as f,q as y,O as _,j a
 										>
 											<md-filled-tonal-icon-button
 												form
-												@click=${async o=>{o.stopPropagation();try{const{materialConfirm:t}=await y(()=>import("./index-88ec65b2.js"),["./index-88ec65b2.js","./index-be573e0b.js"],import.meta.url);await t(),s.removeIndex(e)}catch{}}}
+												@click=${async o=>{o.stopPropagation();try{const{materialConfirm:t}=await y(()=>import("./index-26c409b8.js"),["./index-26c409b8.js","./index-34c9da03.js"],import.meta.url);await t(),s.removeIndex(e)}catch{}}}
 												class="absolute -top-1 right-0"
 												><md-icon>${_}</md-icon></md-filled-tonal-icon-button
 											>
